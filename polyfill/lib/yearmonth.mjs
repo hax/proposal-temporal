@@ -36,7 +36,7 @@ export class YearMonth {
     return ES.LeapYear(GetSlot(this, YEAR));
   }
   with(dateLike = {}, disambiguation = 'constrain') {
-    if (!ES.ValidPropertyBag(dateLike, [ 'year', 'month' ])) {
+    if (!ES.ValidPropertyBag(dateLike, ['year', 'month'])) {
       throw new RangeError('invalid year-month-like');
     }
     const { year = GetSlot(this, YEAR), month = GetSlot(this, MONTH) } = dateLike;
@@ -45,7 +45,13 @@ export class YearMonth {
   }
   plus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
-    if (!ES.ValidPropertyBag(duration, [], [ 'days', 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds' ])) {
+    if (
+      !ES.ValidPropertyBag(
+        duration,
+        [],
+        ['days', 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds']
+      )
+    ) {
       throw new RangeError('invalid duration');
     }
     let { year, month } = this;
@@ -57,7 +63,13 @@ export class YearMonth {
   }
   minus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
-    if (!ES.ValidPropertyBag(duration, [], [ 'days', 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds' ])) {
+    if (
+      !ES.ValidPropertyBag(
+        duration,
+        [],
+        ['days', 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds']
+      )
+    ) {
       throw new RangeError('invalid duration');
     }
     let { year, month } = this;
@@ -101,11 +113,12 @@ export class YearMonth {
     if (!match) throw new RangeError(`invalid yearmonth: ${isoString}`);
     const year = ES.ToInteger(match[1]);
     const month = ES.ToInteger(match[2]);
-    const YearMonth = ES.GetIntrinsic('%Temporal.YearMonth%');
-    return new YearMonth(year, month, 'reject');
+    const Construct = this;
+    return new Construct(year, month, 'reject');
   }
   static from(...args) {
-    return ES.CastYearMonth(...args);
+    const result = ES.CastYearMonth(...args);
+    return this === YearMonth ? result : new this(result.year, result.month);
   }
   static compare(one, two) {
     one = ES.CastYearMonth(one);

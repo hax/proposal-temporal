@@ -53,7 +53,7 @@ export class Date {
     return ES.LeapYear(GetSlot(this, YEAR));
   }
   with(dateLike = {}, disambiguation = 'constrain') {
-    if (!ES.ValidPropertyBag(dateLike, [ 'year', 'month', 'day' ])) {
+    if (!ES.ValidPropertyBag(dateLike, ['year', 'month', 'day'])) {
       throw new RangeError('invalid date-like');
     }
     const { year = GetSlot(this, YEAR), month = GetSlot(this, MONTH), day = GetSlot(this, DAY) } = dateLike;
@@ -62,7 +62,9 @@ export class Date {
   }
   plus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
-    if (!ES.ValidPropertyBag(duration, [], [ 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds' ])) {
+    if (
+      !ES.ValidPropertyBag(duration, [], ['hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds'])
+    ) {
       throw new RangeError('invalid duration');
     }
     let { year, month, day } = this;
@@ -73,7 +75,9 @@ export class Date {
   }
   minus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
-    if (!ES.ValidPropertyBag(duration, [], [ 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds' ])) {
+    if (
+      !ES.ValidPropertyBag(duration, [], ['hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds'])
+    ) {
       throw new RangeError('invalid duration');
     }
     let { year, month, day } = this;
@@ -124,11 +128,12 @@ export class Date {
     const year = ES.ToInteger(match[1]);
     const month = ES.ToInteger(match[2]);
     const day = ES.ToInteger(match[3]);
-    const Date = ES.GetIntrinsic('%Temporal.Date%');
-    return new Date(year, month, day, 'reject');
+    const Construct = this;
+    return new Construct(year, month, day, 'reject');
   }
   static from(...args) {
-    return ES.CastDate(...args);
+    const result = ES.CastDate(...args);
+    return this === Date ? result : new this(result.year, result.month, result.day);
   }
   static compare(one, two) {
     one = ES.CastDate(one);
