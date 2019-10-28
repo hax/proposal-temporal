@@ -86,7 +86,8 @@ export class Time {
       microsecond = GetSlot(this, MICROSECOND),
       nanosecond = GetSlot(this, NANOSECOND)
     } = timeLike;
-    return new Time(hour, minute, second, millisecond, microsecond, nanosecond, disambiguation);
+    const Construct = ES.SpeciesConstructor(this, Time);
+    return new Construct(hour, minute, second, millisecond, microsecond, nanosecond, disambiguation);
   }
   plus(durationLike) {
     const duration = ES.CastDuration(durationLike);
@@ -109,7 +110,8 @@ export class Time {
       microseconds,
       nanoseconds
     ));
-    return new Time(hour, minute, second, millisecond, microsecond, nanosecond);
+    const Construct = ES.SpeciesConstructor(this, Time);
+    return new Construct(hour, minute, second, millisecond, microsecond, nanosecond);
   }
   minus(durationLike) {
     const duration = ES.CastDuration(durationLike);
@@ -132,7 +134,8 @@ export class Time {
       microseconds,
       nanoseconds
     ));
-    return new Time(hour, minute, second, millisecond, microsecond, nanosecond);
+    const Construct = ES.SpeciesConstructor(this, Time);
+    return new Construct(hour, minute, second, millisecond, microsecond, nanosecond);
   }
   difference(other = {}) {
     other = ES.CastTime(other);
@@ -194,9 +197,5 @@ export class Time {
   }
 }
 Time.prototype.toJSON = Time.prototype.toString;
-if ('undefined' !== typeof Symbol) {
-  Object.defineProperty(Time.prototype, Symbol.toStringTag, {
-    value: 'Temporal.Time'
-  });
-}
-MakeIntrinsicClass(Time);
+
+MakeIntrinsicClass(Time, 'Temporal.Time');

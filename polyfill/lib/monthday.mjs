@@ -37,7 +37,8 @@ export class MonthDay {
       throw new RangeError('invalid month-day-like');
     }
     const { month = GetSlot(this, MONTH), day = GetSlot(this, DAY) } = dateLike;
-    return new MonthDay(month, day, disambiguation);
+    const Construct = ES.SpeciesConstructor(this, MonthDay);
+    return new Construct(month, day, disambiguation);
   }
   plus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
@@ -49,7 +50,8 @@ export class MonthDay {
     const year = 1970; // non-leap year
     ({ month, day } = ES.AddDate(year, month, day, years, months, days, disambiguation));
     ({ month, day } = ES.BalanceDate(year, month, day));
-    return new MonthDay(month, day);
+    const Construct = ES.SpeciesConstructor(this, MonthDay);
+    return new Construct(month, day);
   }
   minus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
@@ -61,7 +63,8 @@ export class MonthDay {
     const { months, days } = duration;
     ({ month, day } = ES.SubtractDate(year, month, day, years, months, days, disambiguation));
     ({ month, day } = ES.BalanceDate(year, month, day));
-    return new MonthDay(month, day);
+    const Construct = ES.SpeciesConstructor(this, MonthDay);
+    return new Construct(month, day);
   }
   difference(other) {
     other = ES.CastMonthDay(other);
@@ -115,9 +118,5 @@ export class MonthDay {
   }
 }
 MonthDay.prototype.toJSON = MonthDay.prototype.toString;
-if ('undefined' !== typeof Symbol) {
-  Object.defineProperty(MonthDay.prototype, Symbol.toStringTag, {
-    value: 'Temporal.MonthDay'
-  });
-}
-MakeIntrinsicClass(MonthDay);
+
+MakeIntrinsicClass(MonthDay, 'Temporal.MonthDay');

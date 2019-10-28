@@ -57,7 +57,8 @@ export class Date {
       throw new RangeError('invalid date-like');
     }
     const { year = GetSlot(this, YEAR), month = GetSlot(this, MONTH), day = GetSlot(this, DAY) } = dateLike;
-    return new Date(year, month, day, disambiguation);
+    const Construct = ES.SpeciesConstructor(this, Date);
+    return new Construct(year, month, day, disambiguation);
   }
   plus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
@@ -67,7 +68,8 @@ export class Date {
     let { year, month, day } = this;
     const { years, months, days } = duration;
     ({ year, month, day } = ES.AddDate(year, month, day, years, months, days, disambiguation));
-    return new Date(year, month, day);
+    const Construct = ES.SpeciesConstructor(this, Date);
+    return new Construct(year, month, day);
   }
   minus(durationLike = {}, disambiguation = 'constrain') {
     const duration = ES.CastDuration(durationLike);
@@ -77,7 +79,8 @@ export class Date {
     let { year, month, day } = this;
     const { years, months, days } = duration;
     ({ year, month, day } = ES.SubtractDate(year, month, day, years, months, days, disambiguation));
-    return new Date(year, month, day);
+    const Construct = ES.SpeciesConstructor(this, Date);
+    return new Construct(year, month, day);
   }
   difference(other) {
     other = ES.CastDate(other);
@@ -138,10 +141,4 @@ export class Date {
 }
 Date.prototype.toJSON = Date.prototype.toString;
 
-if ('undefined' !== typeof Symbol) {
-  Object.defineProperty(Date.prototype, Symbol.toStringTag, {
-    value: 'Temporal.Date'
-  });
-}
-
-MakeIntrinsicClass(Date);
+MakeIntrinsicClass(Date, 'Temporal.Date');
